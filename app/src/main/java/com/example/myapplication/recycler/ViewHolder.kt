@@ -1,7 +1,7 @@
-package com.example.myapplication
+package com.example.myapplication.recycler
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.Joke
 import com.example.myapplication.databinding.ItemViewBinding
 
 class ViewHolder(val binding: ItemViewBinding) : RecyclerView.ViewHolder(binding.root) {

@@ -1,15 +1,16 @@
-package com.example.myapplication
+package com.example.myapplication.recycler.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.view.menu.MenuView.ItemView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.Joke
 import com.example.myapplication.databinding.ItemViewBinding
+import com.example.myapplication.recycler.ViewHolder
+import com.example.myapplication.recycler.util.DiffUtilCallback
 
 class Adapter : RecyclerView.Adapter<ViewHolder>() {
-    //private var jokes = ArrayList<Joke>()
-    private val jokes = mutableListOf<Joke>()
+    private var jokes = mutableListOf<Joke>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,15 +27,14 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
         holder.bind(jokes[position])
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun setItems(list: List<Joke>){
+
+    fun setItems(list: List<Joke>) {
+        val diffUtilCallback = DiffUtilCallback(jokes, list)
+        val calculatedDiff = DiffUtil.calculateDiff(diffUtilCallback)
+        jokes.clear()
         jokes.addAll(list)
-        notifyDataSetChanged()
-    }
-    @SuppressLint("NotifyDataSetChanged")
-    fun addItems(joke: Joke){
-        jokes.add(joke)
-        notifyDataSetChanged()
+        calculatedDiff.dispatchUpdatesTo(this)
+
     }
 
 }

@@ -15,10 +15,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
+        tools:listitem="@layout/item_view"
         />
 
-
+    <Button
+        android:id="@+id/change_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/change_list"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_view">
+    </Button>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
