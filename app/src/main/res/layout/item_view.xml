@@ -6,7 +6,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="12dp"
     android:background="@drawable/item_background"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    android:id="@+id/item"
+    >
 
     <TextView
         android:id="@+id/categoryTextView"
