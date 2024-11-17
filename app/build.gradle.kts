@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.backend.wasm.ir2wasm.bind
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -50,4 +48,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    val fragment_version = "1.6.2"
+    implementation(libs.fragment.ktx)
+    implementation(libs.viewbindingpropertydelegate.full)
 }
