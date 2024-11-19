@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
     private fun openFragment(){
         val fragment = JokeListFragment()
 
