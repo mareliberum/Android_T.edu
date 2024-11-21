@@ -2,4 +2,6 @@
     <string name="app_name">My Application</string>
     <string name="loremIpsum">LoremIpsum</string>
     <string name="change_list">Change LIst</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
