@@ -49,7 +49,6 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    val fragment_version = "1.6.2"
     implementation(libs.fragment.ktx)
     implementation(libs.viewbindingpropertydelegate.full)
 }

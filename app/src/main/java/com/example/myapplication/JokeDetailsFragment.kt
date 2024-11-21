@@ -40,6 +40,10 @@ class JokeDetailsFragment : Fragment() {
     }
 
     companion object {
+        const val JOKE_QUESTION = "JOKE_QUESTION"
+        const val JOKE_ANSWER = "JOKE_ANSWER"
+        const val JOKE_CATEGORY ="JOKE_CATEGORY"
+
         fun newInstance(question: String, answer: String, category: String): JokeDetailsFragment {
             val fragment = JokeDetailsFragment()
             val args = Bundle().apply {
@@ -51,4 +55,6 @@ class JokeDetailsFragment : Fragment() {
             return fragment
         }
     }
+
+
 }
