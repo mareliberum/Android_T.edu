@@ -1,5 +1,8 @@
 package com.example.myapplication
 
+import com.example.myapplication.data.RetrofitInstance
+import java.util.UUID
+
 object JokeRepository {
     private val jokes = mutableListOf(
         Joke(
@@ -25,18 +28,24 @@ object JokeRepository {
     fun addJoke(joke: Joke){
         jokes.add(joke)
     }
+    fun addToStart(joke: Joke){
+        jokes.add(0,joke)
+    }
 
     fun getJokes(): List<Joke> {
         return jokes.toList()
     }
 
-    fun newList(): List<Joke>{
-        return listOf(
-            Joke("8","Math", "Why was the math book sad?", "Because it had too many problems."),
-            Joke("9","Science", "Why can't you trust an atom?", "Because they make up everything."),
-            Joke("10","Food", "Why don't eggs tell jokes?", "Because they might crack up.")
-        )
+    suspend fun loadJokes(){
+
+        for(joke in RetrofitInstance.api.getJokes().jokes){
+            val setup = joke.setup
+            val delivery = joke.delivery
+            val newJoke = Joke(UUID.randomUUID().toString(), "Loaded from Internet", setup, delivery)
+            addJoke(newJoke)
+        }
+
+
+
     }
-
-
 }

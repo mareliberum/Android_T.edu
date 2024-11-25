@@ -3,7 +3,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.AddJokeFragment
 import com.example.myapplication.JokeRepository
@@ -12,7 +12,6 @@ import com.example.myapplication.databinding.FragmentJokeListBinding
 import com.example.myapplication.recycler.adapter.Adapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -37,18 +36,15 @@ class JokeListFragment : Fragment() {
         jokeAdapter = Adapter()
 
         recyclerView.apply {
-            layoutManager = GridLayoutManager(requireContext(),1)
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = jokeAdapter
         }
 
         // Инициализируем список шуток
         Adapter.setItems(jokeAdapter, JokeRepository.getJokes())
 
-        val newJokes = JokeRepository.newList()
-
-
         binding.refresh.setOnClickListener{
-            Adapter.setItems(jokeAdapter, newJokes)
+            fetchJokes()
         }
         binding.btnAddJoke.setOnClickListener{
             val fragment = AddJokeFragment()
@@ -59,13 +55,6 @@ class JokeListFragment : Fragment() {
                .commit()
         }
 
-
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        fetchJokes()
     }
 
     private fun fetchJokes(){
@@ -73,8 +62,9 @@ class JokeListFragment : Fragment() {
         binding.emptyTextView.visibility = View.GONE
 
         CoroutineScope(Dispatchers.Main).launch {
-            delay(2000)
+
             val jokes = withContext(Dispatchers.IO) {
+                JokeRepository.loadJokes()
                 JokeRepository.getJokes()
             }
             binding.progressBar.visibility = View.GONE
@@ -86,4 +76,7 @@ class JokeListFragment : Fragment() {
         }
 
     }
+
+
+
 }

@@ -45,7 +45,7 @@
         android:id="@+id/refresh"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/change_list"
+        android:text="@string/load_more_jokes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recyclerView"
         app:layout_constraintStart_toStartOf="parent"

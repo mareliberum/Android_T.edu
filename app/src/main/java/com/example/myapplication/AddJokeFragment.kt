@@ -38,7 +38,7 @@ class AddJokeFragment : Fragment() {
                     answer = answer.toString()
                 )
 
-                JokeRepository.addJoke(newJoke)
+                JokeRepository.addToStart(newJoke)
                 parentFragmentManager.popBackStack()
             }
 
