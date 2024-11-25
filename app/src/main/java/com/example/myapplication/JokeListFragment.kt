@@ -5,9 +5,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.Joke
+import com.example.myapplication.AddJokeFragment
+import com.example.myapplication.JokeRepository
+import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentJokeListBinding
 import com.example.myapplication.recycler.adapter.Adapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class JokeListFragment : Fragment() {
     private lateinit var jokeAdapter: Adapter
@@ -35,46 +42,48 @@ class JokeListFragment : Fragment() {
         }
 
         // Инициализируем список шуток
-        initialJokeList()
+        Adapter.setItems(jokeAdapter, JokeRepository.getJokes())
 
-
-        val newJokes = listOf(
-            Joke(8,"Math", "Why was the math book sad?", "Because it had too many problems."),
-            Joke(9,"Science", "Why can't you trust an atom?", "Because they make up everything."),
-            Joke(10,"Food", "Why don't eggs tell jokes?", "Because they might crack up.")
-        )
+        val newJokes = JokeRepository.newList()
 
 
         binding.refresh.setOnClickListener{
-
             Adapter.setItems(jokeAdapter, newJokes)
         }
+        binding.btnAddJoke.setOnClickListener{
+            val fragment = AddJokeFragment()
+
+           parentFragmentManager.beginTransaction()
+               .replace(R.id.fragmentContainer, fragment)
+               .addToBackStack(null)
+               .commit()
+        }
+
 
 
     }
 
-    //начальный список шуток
-    private fun initialJokeList(){
-        val initialJokes = listOf(
-            Joke(
-                1,
-                "Christmas",
-                "What does Santa suffer from if he gets stuck in a chimney?",
-                "Claustrophobia!"
-            ),
-            Joke(2, "Math", "Why was the math book sad?", "Because it had too many problems."),
-            Joke(3, "Animals", "Why don't some fish play piano?", "Because they can't tuna fish."),
-            Joke(4, "Tech", "Why did the computer go to the doctor?", "Because it had a virus."),
-            Joke(
-                5,
-                "School",
-                "Why was the student's report card wet?",
-                "Because it was below sea level."
-            ),
-            Joke(6, "Science", "Why can't you trust an atom?", "Because they make up everything."),
-            Joke(7, "Food", "Why don't eggs tell jokes?", "Because they might crack up.")
-        )
-        Adapter.setItems(jokeAdapter, initialJokes)
+    override fun onResume() {
+        super.onResume()
+        fetchJokes()
+    }
+
+    private fun fetchJokes(){
+        binding.progressBar.visibility = View.VISIBLE
+        binding.emptyTextView.visibility = View.GONE
+
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(2000)
+            val jokes = withContext(Dispatchers.IO) {
+                JokeRepository.getJokes()
+            }
+            binding.progressBar.visibility = View.GONE
+            if (jokes.isEmpty()) {
+                binding.emptyTextView.visibility = View.VISIBLE
+            } else {
+                Adapter.setItems(jokeAdapter, jokes)
+            }
+        }
 
     }
 }
