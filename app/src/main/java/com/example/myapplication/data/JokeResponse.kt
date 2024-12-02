@@ -11,6 +11,8 @@ data class JokeResponse(
 
 @Serializable
 data class JokeItem(
+    @SerializedName("category")
+    val category: String,
     @SerializedName("setup")
     val setup : String,
     @SerializedName("delivery")
