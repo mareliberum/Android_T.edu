@@ -10,7 +10,7 @@ import com.example.myapplication.databinding.ItemViewBinding
 import com.example.myapplication.recycler.ViewHolder
 import com.example.myapplication.recycler.util.DiffUtilCallback
 
-class Adapter() : RecyclerView.Adapter<ViewHolder>() {
+class Adapter : RecyclerView.Adapter<ViewHolder>() {
     private var jokes = mutableListOf<Joke>()
 
 
@@ -30,6 +30,7 @@ class Adapter() : RecyclerView.Adapter<ViewHolder>() {
             (holder.itemView.context as? MainActivity)?.onJokeClick(jokes[position])
         }
 
+
     }
 
 
@@ -40,9 +41,10 @@ class Adapter() : RecyclerView.Adapter<ViewHolder>() {
             adapter.jokes.clear()
             adapter.jokes.addAll(list)
             calculatedDiff.dispatchUpdatesTo(adapter)
-    
-    
+
         }
     }
+
+
 
 }
