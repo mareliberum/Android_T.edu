@@ -17,7 +17,6 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:textColor="@android:color/holo_blue_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +31,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingTop="8dp"
-        android:textColor="@android:color/black"
         android:textSize="14sp"
         tools:text="Dolor Est"/>
 
@@ -47,7 +45,7 @@
         android:textSize="14sp"
         android:maxLines="1"
         android:ellipsize="end"
-        android:textColor="@android:color/darker_gray"
+
         tools:text="Text"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
