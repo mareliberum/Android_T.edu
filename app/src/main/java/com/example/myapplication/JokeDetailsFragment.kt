@@ -24,13 +24,13 @@ class JokeDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Получение данных из аргументов
-        val question = arguments?.getString(JOKE_QUESTION)
-        val answer = arguments?.getString(JOKE_ANSWER)
+        val setup = arguments?.getString(JOKE_QUESTION)
+        val delivery = arguments?.getString(JOKE_ANSWER)
         val category = arguments?.getString(JOKE_CATEGORY)
 
         // Установка данных в представление
-        binding.question.text = question
-        binding.answer.text = answer
+        binding.question.text = setup
+        binding.answer.text = delivery
         binding.category.text = category
     }
 
@@ -40,11 +40,11 @@ class JokeDetailsFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(question: String, answer: String, category: String): JokeDetailsFragment {
+        fun newInstance(setup: String, delivery: String, category: String): JokeDetailsFragment {
             val fragment = JokeDetailsFragment()
             val args = Bundle().apply {
-                putString(JOKE_QUESTION, question)
-                putString(JOKE_ANSWER, answer)
+                putString(JOKE_QUESTION, setup)
+                putString(JOKE_ANSWER, delivery)
                 putString(JOKE_CATEGORY, category)
             }
             fragment.arguments = args

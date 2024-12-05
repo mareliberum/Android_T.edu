@@ -2,20 +2,20 @@ package com.example.myapplication.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
-import com.example.myapplication.Joke
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.myapplication.data.JokeItem
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface JokeDao {
-   @Insert
-   suspend fun insertAll(jokes: List<JokeItem>)
 
-   @Insert
+
+   @Insert(onConflict = OnConflictStrategy.REPLACE)
    suspend fun insert(joke : Joke)
 
    @Query("SELECT * FROM jokes")
-   fun getAllJokes(): Flow<List<Joke>>
+   fun getAllJokes(): List<Joke>
+
+   @Query("DELETE FROM jokes WHERE timeStamp < :expirationTime")
+   fun deleteExpired(expirationTime : Long)
 
 }

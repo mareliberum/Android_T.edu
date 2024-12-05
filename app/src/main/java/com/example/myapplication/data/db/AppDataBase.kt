@@ -1,9 +1,29 @@
 package com.example.myapplication.data.db
 
+import android.content.Context
 import androidx.room.Database
-import com.example.myapplication.Joke
+import androidx.room.Room
+import androidx.room.RoomDatabase
 
-@Database(entities = [Joke :: class], version = 1)
-abstract class AppDataBase {
+@Database(entities = [Joke :: class], version = 2)
+abstract class AppDataBase : RoomDatabase() {
     abstract fun JokeDao(): JokeDao
+
+    companion object{
+        @Volatile
+        lateinit var INSTANCE: AppDataBase
+
+        fun initDatabase(context: Context){
+            val instance = Room.databaseBuilder(
+                context.applicationContext,
+                AppDataBase::class.java,
+                "app_database"
+            )
+                .fallbackToDestructiveMigration()
+                .build()
+            INSTANCE = instance
+        }
+    }
+
+
 }

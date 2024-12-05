@@ -2,14 +2,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.AddJokeFragment
-import com.example.myapplication.JokeRepository
-import com.example.myapplication.JokeViewModel
 import com.example.myapplication.R
+import com.example.myapplication.data.JokeViewModel
 import com.example.myapplication.databinding.FragmentJokeListBinding
 import com.example.myapplication.recycler.adapter.Adapter
 
@@ -33,8 +33,17 @@ class JokeListFragment : Fragment() {
 
         val jokeViewModel: JokeViewModel by viewModels()
 
-        jokeViewModel.loaded.observe(viewLifecycleOwner) { loaded ->
-            if (loaded == true) Adapter.setItems(jokeAdapter, JokeRepository.getJokes())
+        jokeViewModel.jokeList.observe(viewLifecycleOwner){ jokeList ->
+            Adapter.setItems(jokeAdapter, jokeList)
+        }
+
+        jokeViewModel.loadStaticJokes()
+        jokeViewModel.fetchJokes()
+
+        jokeViewModel.isError.observe(viewLifecycleOwner){isError ->
+            if (isError) {
+                 errorHandler()
+            }
         }
 
         jokeViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -43,6 +52,9 @@ class JokeListFragment : Fragment() {
         }
 
         jokeViewModel.fetchJokes()
+
+
+
 
         recyclerView = binding.recyclerView
         jokeAdapter = Adapter()
@@ -60,17 +72,13 @@ class JokeListFragment : Fragment() {
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
                     // Проверяем, достигнут ли конец списка
-                    if (lastVisibleItemPosition == totalItemCount - 1 && jokeViewModel.isLoading.value == false) {
+                    if (lastVisibleItemPosition == totalItemCount - 1 ) {       //  && jokeViewModel.isLoading.value == false
                         jokeViewModel.fetchJokes()
                     }
                 }
             })
 
         }
-
-
-        // Инициализируем список шуток
-        Adapter.setItems(jokeAdapter, JokeRepository.getJokes())
 
         binding.btnAddJoke.setOnClickListener {
             val fragment = AddJokeFragment()
@@ -80,6 +88,17 @@ class JokeListFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-
     }
+
+
+
+    private fun errorHandler(){
+
+//        withContext(Dispatchers.Main){
+        Toast.makeText(activity, "No internet connection!", Toast.LENGTH_LONG).show()
+
+//        }
+    }
+
+
 }

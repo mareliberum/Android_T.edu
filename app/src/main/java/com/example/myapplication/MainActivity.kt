@@ -2,20 +2,29 @@ package com.example.myapplication
 
 import JokeListFragment
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.myapplication.data.JokeViewModel
+import com.example.myapplication.data.db.AppDataBase
+import com.example.myapplication.data.db.Joke
 
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppDataBase.initDatabase(this)
         setContentView(R.layout.activity_main_fragments)
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             openFragment()
         }
+
+        val jokeViewModel: JokeViewModel by viewModels()
+        jokeViewModel.scheduleCleanUp()
+
     }
 
-    private fun openFragment(){
+    private fun openFragment() {
         val fragment = JokeListFragment()
 
         supportFragmentManager
@@ -25,10 +34,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun onJokeClick(joke: Joke){
+    fun onJokeClick(joke: Joke) {
         val fragment = JokeDetailsFragment.newInstance(
-            joke.question,
-            joke.answer,
+            joke.setup,
+            joke.delivery,
             joke.category
         )
         supportFragmentManager.beginTransaction()

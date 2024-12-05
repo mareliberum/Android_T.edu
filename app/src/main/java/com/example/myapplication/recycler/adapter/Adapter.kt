@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.Joke
+import com.example.myapplication.data.db.Joke
 import com.example.myapplication.MainActivity
 import com.example.myapplication.databinding.ItemViewBinding
 import com.example.myapplication.recycler.ViewHolder
