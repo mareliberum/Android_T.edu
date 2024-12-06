@@ -1,14 +1,14 @@
-package com.example.myapplication.recycler.adapter
+package com.example.myapplication.presentation.recycler.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.data.db.Joke
-import com.example.myapplication.MainActivity
+import com.example.myapplication.presentation.MainActivity
 import com.example.myapplication.databinding.ItemViewBinding
-import com.example.myapplication.recycler.ViewHolder
-import com.example.myapplication.recycler.util.DiffUtilCallback
+import com.example.myapplication.presentation.recycler.ViewHolder
+import com.example.myapplication.presentation.recycler.util.DiffUtilCallback
 
 class Adapter : RecyclerView.Adapter<ViewHolder>() {
     private var jokes = mutableListOf<Joke>()

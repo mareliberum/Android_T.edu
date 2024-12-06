@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.myapplication.data.JokeViewModel
 import com.example.myapplication.data.db.Joke
+import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.databinding.FragmentAddJokeBinding
 
-class AddJokeFragment : Fragment() {
+class AddJokeFragment(private val jokeDao: JokeDao) : Fragment() {
 
     private lateinit var binding: FragmentAddJokeBinding
 
@@ -41,7 +41,7 @@ class AddJokeFragment : Fragment() {
                     isFromNet = false,
                     timeStamp = System.currentTimeMillis()
                 )
-                jokeViewModel.addJoke(newJoke)
+                jokeViewModel.addJoke(newJoke, jokeDao)
                 parentFragmentManager.popBackStack()
             }
 

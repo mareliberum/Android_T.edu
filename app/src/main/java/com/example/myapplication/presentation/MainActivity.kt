@@ -1,12 +1,12 @@
-package com.example.myapplication
+package com.example.myapplication.presentation
 
-import JokeListFragment
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.myapplication.data.JokeViewModel
+import com.example.myapplication.R
 import com.example.myapplication.data.db.AppDataBase
 import com.example.myapplication.data.db.Joke
+import com.example.myapplication.data.db.JokeDao
 
 
 class MainActivity : AppCompatActivity() {
@@ -15,23 +15,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         AppDataBase.initDatabase(this)
         setContentView(R.layout.activity_main_fragments)
+        val jokeDao = AppDataBase.INSTANCE.JokeDao()
         if (savedInstanceState == null) {
-            openFragment()
+            openFragment(jokeDao)
         }
 
-        val jokeViewModel: JokeViewModel by viewModels()
-        jokeViewModel.scheduleCleanUp()
+        val deletionViewModel : DeletionViewModel by viewModels()
+
+        deletionViewModel.scheduleCleanUp(jokeDao)
 
     }
 
-    private fun openFragment() {
-        val fragment = JokeListFragment()
+    private fun openFragment(jokeDao: JokeDao) {
+
+        val fragment = JokeListFragment(jokeDao)
 
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragmentContainer, fragment)
             .commit()
-
     }
 
     fun onJokeClick(joke: Joke) {

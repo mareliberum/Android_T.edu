@@ -1,4 +1,4 @@
-package com.example.myapplication.recycler
+package com.example.myapplication.presentation.recycler
 
 import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView

@@ -1,10 +1,10 @@
-package com.example.myapplication
+package com.example.myapplication.data.db
 
-import com.example.myapplication.data.db.Joke
+import com.example.myapplication.domain.JokeRepository
 
-object JokeRepository {
+object JokeRepositoryImpl : JokeRepository {
 
-    private val jokes = mutableListOf<Joke>(
+    private val jokes = mutableListOf(
         Joke(
             id = 0,
             "Christmas",
@@ -27,8 +27,13 @@ object JokeRepository {
 
     )
 
-    fun getJokes(): List<Joke> {
+
+    override fun getAllJokes(): List<Joke> {
         return jokes.toList()
+    }
+
+    override fun addJoke(joke: Joke) {
+        jokes.add(joke)
     }
 
 }

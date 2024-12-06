@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.data
 
 const val JOKE_QUESTION = "JOKE_QUESTION"
 const val JOKE_ANSWER = "JOKE_ANSWER"

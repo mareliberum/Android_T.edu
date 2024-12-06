@@ -1,3 +1,5 @@
+package com.example.myapplication.presentation
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,13 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.AddJokeFragment
 import com.example.myapplication.R
-import com.example.myapplication.data.JokeViewModel
+import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.databinding.FragmentJokeListBinding
-import com.example.myapplication.recycler.adapter.Adapter
+import com.example.myapplication.presentation.recycler.adapter.Adapter
 
-class JokeListFragment : Fragment() {
+class JokeListFragment(val jokeDao: JokeDao) : Fragment() {
+
     private lateinit var jokeAdapter: Adapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: FragmentJokeListBinding
@@ -23,7 +25,7 @@ class JokeListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        // Подключаем макет фрагмента
+       // Подключаем макет фрагмента
         binding = FragmentJokeListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -37,8 +39,8 @@ class JokeListFragment : Fragment() {
             Adapter.setItems(jokeAdapter, jokeList)
         }
 
-        jokeViewModel.loadStaticJokes()
-        jokeViewModel.fetchJokes()
+
+        jokeViewModel.fetchJokes(jokeDao)
 
         jokeViewModel.isError.observe(viewLifecycleOwner){isError ->
             if (isError) {
@@ -51,10 +53,7 @@ class JokeListFragment : Fragment() {
                 View.VISIBLE else binding.progressBar.visibility = View.GONE
         }
 
-        jokeViewModel.fetchJokes()
-
-
-
+        jokeViewModel.fetchJokes(jokeDao)
 
         recyclerView = binding.recyclerView
         jokeAdapter = Adapter()
@@ -73,7 +72,7 @@ class JokeListFragment : Fragment() {
 
                     // Проверяем, достигнут ли конец списка
                     if (lastVisibleItemPosition == totalItemCount - 1 ) {       //  && jokeViewModel.isLoading.value == false
-                        jokeViewModel.fetchJokes()
+                        jokeViewModel.fetchJokes(jokeDao)
                     }
                 }
             })
@@ -81,7 +80,7 @@ class JokeListFragment : Fragment() {
         }
 
         binding.btnAddJoke.setOnClickListener {
-            val fragment = AddJokeFragment()
+            val fragment = AddJokeFragment(jokeDao)
 
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, fragment)
@@ -93,11 +92,8 @@ class JokeListFragment : Fragment() {
 
 
     private fun errorHandler(){
-
-//        withContext(Dispatchers.Main){
         Toast.makeText(activity, "No internet connection!", Toast.LENGTH_LONG).show()
 
-//        }
     }
 
 

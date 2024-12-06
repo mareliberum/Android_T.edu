@@ -2,24 +2,23 @@ package com.example.myapplication.data.db
 
 import android.util.Log
 import com.example.myapplication.data.RetrofitInstance
+import com.example.myapplication.domain.JokeDbRepository
+import com.example.myapplication.domain.JokeRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class JokeDbRepository(private val jokeDao: JokeDao) {
+class JokeDbRepositoryImpl(private val jokeDao: JokeDao) : JokeRepository, JokeDbRepository{
 
-    fun getAllJokes(): List<Joke> = jokeDao.getAllJokes()
+    override fun getAllJokes(): List<Joke> = jokeDao.getAllJokes()
 
-    fun addJoke(joke: Joke){
-        insert(joke)
-    }
-    private fun insert(joke: Joke) {
+    override fun addJoke(joke: Joke) {
         CoroutineScope(Dispatchers.IO).launch {
             jokeDao.insert(joke)
         }
     }
 
-    suspend fun refreshJokes() : Boolean {
+    override suspend fun refreshJokes() : Boolean {
         try {
             val jokesFromNet = RetrofitInstance.api.getJokes().jokes
 
@@ -29,8 +28,7 @@ class JokeDbRepository(private val jokeDao: JokeDao) {
                 val delivery = joke.delivery
                 val timeStamp = System.currentTimeMillis()
                 val newJoke = Joke(id = 0, category, setup, delivery,isFromNet = true, timeStamp)
-                insert(newJoke)
-
+                addJoke(newJoke)
             }
 
             return true
