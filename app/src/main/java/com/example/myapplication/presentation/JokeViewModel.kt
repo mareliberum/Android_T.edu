@@ -30,6 +30,10 @@ class JokeViewModel : ViewModel() {
         _isLoading.value = true
 
         CoroutineScope(Dispatchers.IO).launch {
+            var jokeListFromDb = JokeDbRepositoryImpl(jokeDao).getAllJokes()
+            if (jokeListFromDb.isEmpty()){
+                loadStaticJokes(jokeDao)
+            }
             val isSuccess = JokeDbRepositoryImpl(jokeDao).refreshJokes()
 
             if(!isSuccess){
@@ -38,10 +42,8 @@ class JokeViewModel : ViewModel() {
                 }
             }
 
-            val jokeListFromDb = JokeDbRepositoryImpl(jokeDao).getAllJokes()
-            if (jokeListFromDb.isEmpty()){
-                loadStaticJokes(jokeDao)
-            }
+            jokeListFromDb = JokeDbRepositoryImpl(jokeDao).getAllJokes()
+
             withContext(Dispatchers.Main){
                 _isLoading.value = false
                 _isError.value = false

@@ -14,6 +14,7 @@ coreKtx = "1.13.1"
 picasso = "2.71828"
 retrofit = "2.9.0"
 retrofit2KotlinxSerializationConverter = "1.0.0"
+roomRuntime = "2.6.1"
 viewbindingpropertydelegateFull = "1.5.9"
 
 [libraries]
@@ -32,6 +33,14 @@ core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx"
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+room-guava = { module = "androidx.room:room-guava", version.ref = "roomRuntime" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+room-paging = { module = "androidx.room:room-paging", version.ref = "roomRuntime" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "roomRuntime" }
+room-rxjava3 = { module = "androidx.room:room-rxjava3", version.ref = "roomRuntime" }
+room-testing = { module = "androidx.room:room-testing", version.ref = "roomRuntime" }
 viewbindingpropertydelegate-full = { module = "com.github.kirich1409:viewbindingpropertydelegate-full", version.ref = "viewbindingpropertydelegateFull" }
 
 [plugins]
