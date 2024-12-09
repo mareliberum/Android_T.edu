@@ -9,4 +9,5 @@
     <string name="question">Question</string>
     <string name="category">Category</string>
     <string name="NoJokes">Шутки кончились</string>
+    <string name="load_more_jokes">Load more jokes</string>
 </resources>
