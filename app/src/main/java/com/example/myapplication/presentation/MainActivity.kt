@@ -1,35 +1,46 @@
-package com.example.myapplication
+package com.example.myapplication.presentation
 
-import JokeListFragment
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.myapplication.R
+import com.example.myapplication.data.db.AppDataBase
+import com.example.myapplication.data.db.Joke
+import com.example.myapplication.data.db.JokeDao
 
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppDataBase.initDatabase(this)
         setContentView(R.layout.activity_main_fragments)
-        if(savedInstanceState == null){
-            openFragment()
+        val jokeDao = AppDataBase.INSTANCE.JokeDao()
+        if (savedInstanceState == null) {
+
+            openFragment(jokeDao)
         }
+
+        val deletionViewModel : DeletionViewModel by viewModels()
+
+        deletionViewModel.scheduleCleanUp(jokeDao)
 
     }
 
-    private fun openFragment(){
-        val fragment = JokeListFragment()
+    private fun openFragment(jokeDao: JokeDao) {
+
+        val fragment = JokeListFragment(jokeDao)
 
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragmentContainer, fragment)
             .commit()
-
     }
 
-    fun onJokeClick(joke: Joke){
+    fun onJokeClick(joke: Joke) {
         val fragment = JokeDetailsFragment.newInstance(
-            joke.question,
-            joke.answer,
+            joke.setup,
+            joke.delivery,
             joke.category
         )
         supportFragmentManager.beginTransaction()

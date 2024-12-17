@@ -1,10 +1,13 @@
-package com.example.myapplication
+package com.example.myapplication.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.myapplication.data.JOKE_ANSWER
+import com.example.myapplication.data.JOKE_CATEGORY
+import com.example.myapplication.data.JOKE_QUESTION
 import com.example.myapplication.databinding.FragmentJokeDetailsBinding
 
 class JokeDetailsFragment : Fragment() {
@@ -24,13 +27,13 @@ class JokeDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Получение данных из аргументов
-        val question = arguments?.getString(JOKE_QUESTION)
-        val answer = arguments?.getString(JOKE_ANSWER)
+        val setup = arguments?.getString(JOKE_QUESTION)
+        val delivery = arguments?.getString(JOKE_ANSWER)
         val category = arguments?.getString(JOKE_CATEGORY)
 
         // Установка данных в представление
-        binding.question.text = question
-        binding.answer.text = answer
+        binding.question.text = setup
+        binding.answer.text = delivery
         binding.category.text = category
     }
 
@@ -40,21 +43,15 @@ class JokeDetailsFragment : Fragment() {
     }
 
     companion object {
-        const val JOKE_QUESTION = "JOKE_QUESTION"
-        const val JOKE_ANSWER = "JOKE_ANSWER"
-        const val JOKE_CATEGORY ="JOKE_CATEGORY"
-
-        fun newInstance(question: String, answer: String, category: String): JokeDetailsFragment {
+        fun newInstance(setup: String, delivery: String, category: String): JokeDetailsFragment {
             val fragment = JokeDetailsFragment()
             val args = Bundle().apply {
-                putString(JOKE_QUESTION, question)
-                putString(JOKE_ANSWER, answer)
+                putString(JOKE_QUESTION, setup)
+                putString(JOKE_ANSWER, delivery)
                 putString(JOKE_CATEGORY, category)
             }
             fragment.arguments = args
             return fragment
         }
     }
-
-
 }

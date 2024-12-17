@@ -1,14 +1,18 @@
-package com.example.myapplication
+package com.example.myapplication.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.example.myapplication.data.db.Joke
+import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.databinding.FragmentAddJokeBinding
-import java.util.UUID
+import kotlinx.coroutines.launch
 
-class AddJokeFragment : Fragment() {
+class AddJokeFragment(private val jokeDao: JokeDao) : Fragment() {
 
     private lateinit var binding: FragmentAddJokeBinding
 
@@ -16,14 +20,14 @@ class AddJokeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        println("add joke view created")
+
         binding = FragmentAddJokeBinding.inflate(inflater,container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val jokeViewModel: JokeViewModel by viewModels()
 
         binding.btnAddJoke.setOnClickListener{
             val category = binding.etCategory.text
@@ -32,13 +36,18 @@ class AddJokeFragment : Fragment() {
 
             if(category != null && question != null && answer != null){
                 val newJoke = Joke(
-                    id = UUID.randomUUID().toString(),
+                    id = 0,
                     category = category.toString(),
-                    question = question.toString(),
-                    answer = answer.toString()
+                    setup = question.toString(),
+                    delivery = answer.toString(),
+                    isFromNet = false,
+                    timeStamp = System.currentTimeMillis()
                 )
 
-                JokeRepository.addJoke(newJoke)
+                lifecycleScope.launch {
+                    jokeViewModel.addJoke(newJoke, jokeDao)
+                }
+
                 parentFragmentManager.popBackStack()
             }
 
