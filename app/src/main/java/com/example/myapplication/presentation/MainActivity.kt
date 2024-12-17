@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main_fragments)
         val jokeDao = AppDataBase.INSTANCE.JokeDao()
         if (savedInstanceState == null) {
+
             openFragment(jokeDao)
         }
 

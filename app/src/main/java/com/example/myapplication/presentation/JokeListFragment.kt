@@ -19,6 +19,7 @@ class JokeListFragment(val jokeDao: JokeDao) : Fragment() {
     private lateinit var jokeAdapter: Adapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: FragmentJokeListBinding
+    val jokeViewModel: JokeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,12 +34,11 @@ class JokeListFragment(val jokeDao: JokeDao) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val jokeViewModel: JokeViewModel by viewModels()
+//        val jokeViewModel: JokeViewModel by viewModels()
 
         jokeViewModel.jokeList.observe(viewLifecycleOwner){ jokeList ->
             Adapter.setItems(jokeAdapter, jokeList)
         }
-
 
         jokeViewModel.fetchJokes(jokeDao)
 
@@ -52,8 +52,6 @@ class JokeListFragment(val jokeDao: JokeDao) : Fragment() {
             if (isLoading) binding.progressBar.visibility =
                 View.VISIBLE else binding.progressBar.visibility = View.GONE
         }
-
-        jokeViewModel.fetchJokes(jokeDao)
 
         recyclerView = binding.recyclerView
         jokeAdapter = Adapter()
@@ -71,8 +69,10 @@ class JokeListFragment(val jokeDao: JokeDao) : Fragment() {
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
                     // Проверяем, достигнут ли конец списка
-                    if (lastVisibleItemPosition == totalItemCount - 1 ) {       //  && jokeViewModel.isLoading.value == false
+                    if (lastVisibleItemPosition == totalItemCount - 1 && jokeViewModel.isLoading.value == false) {       //  && jokeViewModel.isLoading.value == false
+//                        jokeViewModel.loadFromAPI(jokeDao)
                         jokeViewModel.fetchJokes(jokeDao)
+
                     }
                 }
             })
@@ -86,6 +86,9 @@ class JokeListFragment(val jokeDao: JokeDao) : Fragment() {
                 .replace(R.id.fragmentContainer, fragment)
                 .addToBackStack(null)
                 .commit()
+        }
+        binding.btnClearDb.setOnClickListener{
+            jokeViewModel.clearDB(jokeDao)
         }
     }
 

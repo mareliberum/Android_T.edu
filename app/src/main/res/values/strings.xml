@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Jokes</string>
     <string name="loremIpsum">LoremIpsum</string>
     <string name="change_list">Change LIst</string>
 
@@ -10,4 +10,5 @@
     <string name="category">Category</string>
     <string name="NoJokes">Шутки кончились</string>
     <string name="load_more_jokes">Load more jokes</string>
+    <string name="clear_db">Clear DB</string>
 </resources>

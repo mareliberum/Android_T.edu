@@ -48,7 +48,18 @@
         android:text="@string/AddJoke"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toEndOf="@id/btn_clear_db">
+
+    </Button>
+
+    <Button
+        android:id="@+id/btn_clear_db"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/clear_db"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_add_joke">
 
     </Button>
 

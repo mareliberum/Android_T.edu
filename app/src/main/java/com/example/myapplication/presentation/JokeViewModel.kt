@@ -3,11 +3,11 @@ package com.example.myapplication.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.myapplication.data.db.JokeRepositoryImpl
+import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.db.Joke
 import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.data.db.JokeDbRepositoryImpl
-import kotlinx.coroutines.CoroutineScope
+import com.example.myapplication.data.db.JokeRepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,11 +29,13 @@ class JokeViewModel : ViewModel() {
 
         _isLoading.value = true
 
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch(Dispatchers.IO){
             var jokeListFromDb = JokeDbRepositoryImpl(jokeDao).getAllJokes()
+
             if (jokeListFromDb.isEmpty()){
                 loadStaticJokes(jokeDao)
             }
+
             val isSuccess = JokeDbRepositoryImpl(jokeDao).refreshJokes()
 
             if(!isSuccess){
@@ -48,19 +50,32 @@ class JokeViewModel : ViewModel() {
                 _isLoading.value = false
                 _isError.value = false
                 _jokeList.value = jokeListFromDb
+
             }
         }
     }
 
-    fun loadStaticJokes(jokeDao: JokeDao){
+
+    suspend fun loadStaticJokes(jokeDao: JokeDao){
         val jokeList = JokeRepositoryImpl.getAllJokes()
         for (joke in jokeList){
             addJoke(joke, jokeDao)
         }
     }
 
-    fun addJoke(joke: Joke, jokeDao: JokeDao){
+    suspend fun addJoke(joke: Joke, jokeDao: JokeDao){
         JokeDbRepositoryImpl(jokeDao).addJoke(joke)
+    }
+
+    fun clearDB(jokeDao: JokeDao){
+        viewModelScope.launch(Dispatchers.IO){
+            JokeDbRepositoryImpl(jokeDao).clearDb()
+            val jokeListFromDb = JokeDbRepositoryImpl(jokeDao).getAllJokes()
+
+            withContext(Dispatchers.Main){
+                _jokeList.value = jokeListFromDb
+            }
+        }
     }
 
 

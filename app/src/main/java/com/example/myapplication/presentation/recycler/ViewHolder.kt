@@ -12,14 +12,11 @@ class ViewHolder(private val binding: ItemViewBinding) : RecyclerView.ViewHolder
         binding.questionTextView.text = joke.setup
         binding.answerTextView.text = joke.delivery
         if (joke.isFromNet){
-            binding.categoryTextView.setTextColor(Color.parseColor("#ffcc0000"))
+            binding.categoryTextView.setTextColor(Color.parseColor("#586249"))
         }
         else{
-            binding.categoryTextView.setTextColor(Color.parseColor("#ff0099cc"))
-
+            binding.categoryTextView.setTextColor(Color.parseColor("#584663"))
         }
     }
-
-
 
 }

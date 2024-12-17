@@ -1,42 +1,50 @@
 package com.example.myapplication.data.db
 
-import android.util.Log
 import com.example.myapplication.data.RetrofitInstance
 import com.example.myapplication.domain.JokeDbRepository
-import com.example.myapplication.domain.JokeRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
-class JokeDbRepositoryImpl(private val jokeDao: JokeDao) : JokeRepository, JokeDbRepository{
+class JokeDbRepositoryImpl(private val jokeDao: JokeDao) : JokeDbRepository {
 
-    override fun getAllJokes(): List<Joke> = jokeDao.getAllJokes()
+    override suspend fun getAllJokes(): List<Joke> = jokeDao.getAllJokes()
 
-    override fun addJoke(joke: Joke) {
-        CoroutineScope(Dispatchers.IO).launch {
-            jokeDao.insert(joke)
-        }
+    override suspend fun deleteExpired(expirationTime: Long) {
+
+        jokeDao.deleteExpired(expirationTime)
+
     }
 
-    override suspend fun refreshJokes() : Boolean {
+    override suspend fun addJoke(joke: Joke) {
+
+        jokeDao.insert(joke)
+
+    }
+
+    override suspend fun clearDb() {
+        jokeDao.clearDb()
+
+    }
+
+
+    override suspend fun refreshJokes(): Boolean {
         try {
             val jokesFromNet = RetrofitInstance.api.getJokes().jokes
 
-            for (joke in jokesFromNet){
+            for (joke in jokesFromNet) {
                 val category = joke.category
                 val setup = joke.setup
                 val delivery = joke.delivery
                 val timeStamp = System.currentTimeMillis()
-                val newJoke = Joke(id = 0, category, setup, delivery,isFromNet = true, timeStamp)
+                val newJoke = Joke(id = 0, category, setup, delivery, isFromNet = true, timeStamp)
                 addJoke(newJoke)
             }
 
             return true
-        }catch (e : Exception){
+        } catch (e: Exception) {
 
-            Log.d("test","connection error")
             return false
         }
-
     }
+
+
+
 }

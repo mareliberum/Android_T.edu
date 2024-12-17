@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.data.db.Joke
 import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.databinding.FragmentAddJokeBinding
+import kotlinx.coroutines.launch
 
 class AddJokeFragment(private val jokeDao: JokeDao) : Fragment() {
 
@@ -41,7 +43,11 @@ class AddJokeFragment(private val jokeDao: JokeDao) : Fragment() {
                     isFromNet = false,
                     timeStamp = System.currentTimeMillis()
                 )
-                jokeViewModel.addJoke(newJoke, jokeDao)
+
+                lifecycleScope.launch {
+                    jokeViewModel.addJoke(newJoke, jokeDao)
+                }
+
                 parentFragmentManager.popBackStack()
             }
 

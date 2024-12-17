@@ -6,4 +6,5 @@ interface JokeRepository {
     fun getAllJokes(): List<Joke>
     fun addJoke(joke: Joke)
 
+
 }
