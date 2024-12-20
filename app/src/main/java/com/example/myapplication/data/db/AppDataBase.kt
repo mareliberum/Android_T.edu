@@ -13,7 +13,7 @@ abstract class AppDataBase : RoomDatabase() {
         @Volatile
         lateinit var INSTANCE: AppDataBase
 
-        fun initDatabase(context: Context){
+        fun initDatabase(context: Context): AppDataBase {
             val instance = Room.databaseBuilder(
                 context.applicationContext,
                 AppDataBase::class.java,
@@ -22,6 +22,7 @@ abstract class AppDataBase : RoomDatabase() {
                 .fallbackToDestructiveMigration()
                 .build()
             INSTANCE = instance
+            return instance
         }
     }
 

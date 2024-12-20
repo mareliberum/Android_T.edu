@@ -1,13 +1,10 @@
 package com.example.myapplication.presentation
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.R
-import com.example.myapplication.data.db.AppDataBase
 import com.example.myapplication.data.db.Joke
 import com.example.myapplication.data.db.JokeDao
-import com.example.myapplication.data.db.StaticDataBase
 
 
 class MainActivity : AppCompatActivity() {
@@ -17,29 +14,28 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        AppDataBase.initDatabase(this)
-        StaticDataBase.initDatabase(this)
+//
+//        AppDataBase.initDatabase(this)
+//        StaticDataBase.initDatabase(this)
 
         setContentView(R.layout.activity_main_fragments)
 
-        jokeDao = AppDataBase.INSTANCE.JokeDao()
-        staticJokeDao = StaticDataBase.INSTANCE.JokeDao()
+//        jokeDao = AppDataBase.INSTANCE.JokeDao()
+//        staticJokeDao = StaticDataBase.INSTANCE.JokeDao()
 
         if (savedInstanceState == null) {
-
-            openFragment(jokeDao, staticJokeDao)
+            openFragment()
         }
 
-        val deletionViewModel : DeletionViewModel by viewModels()
+        //TODO вернуть deletionViewModel и внедрить туда зависимость
+//        val deletionViewModel : DeletionViewModel by viewModels()
 
-        deletionViewModel.scheduleCleanUp(jokeDao)
-
+//        deletionViewModel.scheduleCleanUp(jokeDao)
     }
 
-    private fun openFragment(jokeDao: JokeDao, staticJokeDao: JokeDao) {
+    private fun openFragment() {
 
-        val fragment = JokeListFragment(jokeDao, staticJokeDao)
+        val fragment = JokeListFragment()
 
         supportFragmentManager
             .beginTransaction()

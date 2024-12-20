@@ -4,13 +4,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.data.db.JokeDbRepositoryImpl
+import com.example.myapplication.di.modules.AppDatabaseDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class DeletionViewModel : ViewModel() {
+
+    @Inject
+    @AppDatabaseDao
+    lateinit var jokeDao: JokeDao
+
+    //TODO : дополнить и исправить
     fun scheduleCleanUp(jokeDao: JokeDao) {
         CoroutineScope(Dispatchers.IO).launch {
             while (isActive) {
