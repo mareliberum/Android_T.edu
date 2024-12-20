@@ -19,6 +19,10 @@ class JokeDbRepositoryImpl(private val jokeDao: JokeDao) : JokeDbRepository {
 
     }
 
+    override suspend fun deleteJoke(id: Int) {
+        jokeDao.delete(id)
+    }
+
     override suspend fun clearDb() {
         jokeDao.clearDb()
 

@@ -11,4 +11,7 @@
     <string name="NoJokes">Шутки кончились</string>
     <string name="load_more_jokes">Load more jokes</string>
     <string name="clear_db">Clear DB</string>
+    <string name="clear_network_cahce">clear network cahce</string>
+    <string name="clear_network_db">clear network DB</string>
+    <string name="delete">Delete</string>
 </resources>

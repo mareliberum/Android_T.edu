@@ -14,7 +14,7 @@ import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.databinding.FragmentJokeListBinding
 import com.example.myapplication.presentation.recycler.adapter.Adapter
 
-class JokeListFragment(val jokeDao: JokeDao) : Fragment() {
+class JokeListFragment(private val jokeDao: JokeDao, private val staticJokeDao: JokeDao) : Fragment() {
 
     private lateinit var jokeAdapter: Adapter
     private lateinit var recyclerView: RecyclerView
@@ -33,14 +33,13 @@ class JokeListFragment(val jokeDao: JokeDao) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        val jokeViewModel: JokeViewModel by viewModels()
+        jokeViewModel.fillStaticDb(staticJokeDao)
 
         jokeViewModel.jokeList.observe(viewLifecycleOwner){ jokeList ->
             Adapter.setItems(jokeAdapter, jokeList)
         }
 
-        jokeViewModel.fetchJokes(jokeDao)
+        jokeViewModel.fetchJokes(jokeDao, staticJokeDao)
 
         jokeViewModel.isError.observe(viewLifecycleOwner){isError ->
             if (isError) {
@@ -69,9 +68,9 @@ class JokeListFragment(val jokeDao: JokeDao) : Fragment() {
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
                     // Проверяем, достигнут ли конец списка
-                    if (lastVisibleItemPosition == totalItemCount - 1 && jokeViewModel.isLoading.value == false) {       //  && jokeViewModel.isLoading.value == false
-//                        jokeViewModel.loadFromAPI(jokeDao)
-                        jokeViewModel.fetchJokes(jokeDao)
+                    if (lastVisibleItemPosition == totalItemCount - 1 && jokeViewModel.isLoading.value == false) {
+                        jokeViewModel.loadFromApi(jokeDao)
+                        jokeViewModel.fetchJokes(jokeDao, staticJokeDao)
 
                     }
                 }
@@ -80,7 +79,7 @@ class JokeListFragment(val jokeDao: JokeDao) : Fragment() {
         }
 
         binding.btnAddJoke.setOnClickListener {
-            val fragment = AddJokeFragment(jokeDao)
+            val fragment = AddJokeFragment(staticJokeDao)
 
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, fragment)

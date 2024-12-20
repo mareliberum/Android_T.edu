@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.MainActivity"
-    >
+    tools:context=".presentation.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -13,10 +12,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
 
+        app:layout_constraintBottom_toTopOf="@id/btn_add_joke"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_add_joke"
         tools:listitem="@layout/item_view" />
 
     <ProgressBar
@@ -24,10 +23,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/emptyTextView"
@@ -35,10 +34,10 @@
         android:layout_height="wrap_content"
         android:text="@string/NoJokes"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <Button
@@ -56,13 +55,12 @@
         android:id="@+id/btn_clear_db"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/clear_db"
+        android:text="@string/clear_network_db"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_add_joke">
+        app:layout_constraintEnd_toStartOf="@id/btn_add_joke"
+        app:layout_constraintStart_toStartOf="parent">
 
     </Button>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

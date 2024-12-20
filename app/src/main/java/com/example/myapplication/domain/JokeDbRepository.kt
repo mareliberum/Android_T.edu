@@ -8,5 +8,5 @@ interface JokeDbRepository {
     suspend fun deleteExpired(expirationTime : Long)
     suspend fun clearDb()
     suspend fun addJoke(joke: Joke)
-
+    suspend fun deleteJoke(id: Int)
 }

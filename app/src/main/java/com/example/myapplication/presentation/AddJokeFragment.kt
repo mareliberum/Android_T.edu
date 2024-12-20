@@ -12,7 +12,7 @@ import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.databinding.FragmentAddJokeBinding
 import kotlinx.coroutines.launch
 
-class AddJokeFragment(private val jokeDao: JokeDao) : Fragment() {
+class AddJokeFragment(private val staticJokeDao: JokeDao) : Fragment() {
 
     private lateinit var binding: FragmentAddJokeBinding
 
@@ -45,7 +45,7 @@ class AddJokeFragment(private val jokeDao: JokeDao) : Fragment() {
                 )
 
                 lifecycleScope.launch {
-                    jokeViewModel.addJoke(newJoke, jokeDao)
+                    jokeViewModel.addJoke(newJoke, staticJokeDao)
                 }
 
                 parentFragmentManager.popBackStack()

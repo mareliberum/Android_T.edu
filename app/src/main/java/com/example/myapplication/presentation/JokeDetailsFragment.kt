@@ -5,15 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.myapplication.data.JOKE_ANSWER
-import com.example.myapplication.data.JOKE_CATEGORY
-import com.example.myapplication.data.JOKE_QUESTION
+import androidx.fragment.app.viewModels
+import com.example.myapplication.data.db.Joke
+import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.databinding.FragmentJokeDetailsBinding
 
-class JokeDetailsFragment : Fragment() {
+class JokeDetailsFragment(
+    val joke: Joke,
+    val jokeDao: JokeDao,
+    val staticJokeDao: JokeDao
+) : Fragment() {
 
     private var _binding: FragmentJokeDetailsBinding? = null
     private val binding get() = _binding!!
+    private val jokeViewModel: JokeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,15 +31,22 @@ class JokeDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Получение данных из аргументов
-        val setup = arguments?.getString(JOKE_QUESTION)
-        val delivery = arguments?.getString(JOKE_ANSWER)
-        val category = arguments?.getString(JOKE_CATEGORY)
 
         // Установка данных в представление
-        binding.question.text = setup
-        binding.answer.text = delivery
-        binding.category.text = category
+        binding.question.text = joke.setup
+        binding.answer.text = joke.delivery
+        binding.category.text = joke.category
+
+        binding.deleteJoke.setOnClickListener{
+            if (joke.isFromNet){
+                jokeViewModel.delete(jokeDao, joke.id)
+            }
+            else{
+                jokeViewModel.delete(staticJokeDao, joke.id)
+            }
+            parentFragmentManager.popBackStack()
+        }
+
     }
 
     override fun onDestroyView() {
@@ -42,16 +54,4 @@ class JokeDetailsFragment : Fragment() {
         _binding = null
     }
 
-    companion object {
-        fun newInstance(setup: String, delivery: String, category: String): JokeDetailsFragment {
-            val fragment = JokeDetailsFragment()
-            val args = Bundle().apply {
-                putString(JOKE_QUESTION, setup)
-                putString(JOKE_ANSWER, delivery)
-                putString(JOKE_CATEGORY, category)
-            }
-            fragment.arguments = args
-            return fragment
-        }
-    }
 }

@@ -21,4 +21,7 @@ interface JokeDao {
    @Query("DELETE FROM jokes")
    suspend fun clearDb()
 
+   @Query("DELETE FROM jokes WHERE id == :id")
+   suspend fun delete(id : Int)
+
 }
