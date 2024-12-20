@@ -19,7 +19,7 @@
         tools:text="@string/loremIpsum"
         android:textAlignment="center"
         android:textSize="40sp"
-        android:textColor="@android:color/holo_blue_dark"
+
         app:layout_constraintTop_toTopOf="parent">
 
     </TextView>
@@ -31,7 +31,7 @@
         android:textAlignment="center"
         android:layout_marginTop="20sp"
         android:textSize="25sp"
-        android:textColor="@color/black"
+
         tools:text="@string/loremIpsum"
         app:layout_constraintTop_toBottomOf="@+id/question">
 

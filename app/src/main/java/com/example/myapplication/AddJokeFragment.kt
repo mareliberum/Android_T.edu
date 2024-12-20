@@ -16,8 +16,7 @@ class AddJokeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        println("add joke view created")
+
         binding = FragmentAddJokeBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -35,10 +34,10 @@ class AddJokeFragment : Fragment() {
                     id = UUID.randomUUID().toString(),
                     category = category.toString(),
                     question = question.toString(),
-                    answer = answer.toString()
+                    answer = answer.toString(),
+                    isFromNet = false
                 )
-
-                JokeRepository.addJoke(newJoke)
+                JokeRepository.addToStart(newJoke)
                 parentFragmentManager.popBackStack()
             }
 

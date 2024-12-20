@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/white">
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/refresh"
+        app:layout_constraintBottom_toTopOf="@id/btn_add_joke"
         tools:listitem="@layout/item_view" />
 
     <ProgressBar
@@ -42,28 +42,13 @@
 
 
     <Button
-        android:id="@+id/refresh"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/change_list"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_add_joke"
-        >
-    </Button>
-
-
-    <Button
         android:id="@+id/btn_add_joke"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/AddJoke"
-        app:layout_constraintStart_toEndOf="@id/refresh"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-
-        >
+        app:layout_constraintStart_toStartOf="parent">
 
     </Button>
 
