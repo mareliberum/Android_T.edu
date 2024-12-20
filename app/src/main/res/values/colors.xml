@@ -1,5 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Primary colors -->
+    <color name="colorPrimary">#B42D421C</color>
+    <color name="colorPrimaryContainer">#3700B3</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <!-- Secondary colors -->
+    <color name="colorSecondary">#03DAC6</color>
+    <color name="colorSecondaryContainer">#018786</color>
+    <color name="colorOnSecondary">#000000</color>
+
+    <!-- Background and surface colors -->
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorOnBackground">#000000</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnSurface">#000000</color>
+
+    <!-- Error colors -->
+    <color name="colorError">#B00020</color>
+    <color name="colorErrorContainer">#FDE7E9</color>
+    <color name="colorOnError">#FFFFFF</color>
 </resources>
