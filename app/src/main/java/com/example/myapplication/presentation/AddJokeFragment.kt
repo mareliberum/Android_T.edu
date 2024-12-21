@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,14 +8,28 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.example.myapplication.MyApp
 import com.example.myapplication.data.db.Joke
-import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.databinding.FragmentAddJokeBinding
+import com.example.myapplication.domain.JokeDbRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AddJokeFragment(private val staticJokeDao: JokeDao) : Fragment() {
+class AddJokeFragment : Fragment() {
 
     private lateinit var binding: FragmentAddJokeBinding
+    @Inject
+    lateinit var jokeDbRepository : JokeDbRepository
+
+    @Inject
+    lateinit var jokeViewModelFactory: JokeViewModelFactory
+
+    private val jokeViewModel : JokeViewModel by viewModels { JokeViewModelFactory(jokeDbRepository) }
+
+    override fun onAttach(context: Context) {
+        (requireActivity().application as MyApp).appComponent.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,7 +42,6 @@ class AddJokeFragment(private val staticJokeDao: JokeDao) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val jokeViewModel: JokeViewModel by viewModels()
 
         binding.btnAddJoke.setOnClickListener{
             val category = binding.etCategory.text
@@ -45,7 +59,7 @@ class AddJokeFragment(private val staticJokeDao: JokeDao) : Fragment() {
                 )
 
                 lifecycleScope.launch {
-                    jokeViewModel.addJoke(newJoke, staticJokeDao)
+                    jokeViewModel.addJokeToLocalDatabase(newJoke)
                 }
 
                 parentFragmentManager.popBackStack()

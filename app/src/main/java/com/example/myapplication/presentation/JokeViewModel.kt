@@ -1,19 +1,20 @@
 package com.example.myapplication.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.db.Joke
-import com.example.myapplication.data.db.JokeDao
-import com.example.myapplication.data.db.JokeDbRepositoryImpl
-import com.example.myapplication.data.db.JokeRepositoryImpl
+import com.example.myapplication.domain.JokeDbRepository
+import com.example.myapplication.domain.JokeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class JokeViewModel : ViewModel() {
-    //TODO : Разобраться, как передавать зависимости во viewModel
+class JokeViewModel @Inject constructor(private val jokeDbRepository: JokeDbRepository) : ViewModel() {
+
     private var _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -24,21 +25,23 @@ class JokeViewModel : ViewModel() {
     val jokeList: LiveData<List<Joke>> = _jokeList
 
 
-    fun fetchJokes(jokeDao: JokeDao, staticJokeDao: JokeDao) {
+    fun fetchJokes() {
         if (_isLoading.value == true) return
 
         _isLoading.value = true
 
         viewModelScope.launch(Dispatchers.IO){
             //идем в БД с локальными
-            val jokeListFromStaticDb = JokeDbRepositoryImpl(staticJokeDao).getAllJokes()
+            val jokeListFromStaticDb = jokeDbRepository.getLoacalJokes()
 
             //если бд пустая - грузим из api
             if (jokeListFromStaticDb.isEmpty()){
-                loadFromApi(jokeDao)
+                loadFromApi()
             }
+            //ВЫгружаем из сетевого кэша
+            val jokeListFromDb = jokeDbRepository.getJokesFromApiDatabase()
 
-            val jokeListFromDb = JokeDbRepositoryImpl(jokeDao).getAllJokes()
+            //Общий список
             val jokeList = jokeListFromStaticDb + jokeListFromDb
 
             withContext(Dispatchers.Main){
@@ -50,41 +53,38 @@ class JokeViewModel : ViewModel() {
         }
     }
 
-
-    private suspend fun loadStaticJokes(jokeDao: JokeDao){
-        val jokeList = JokeRepositoryImpl.getAllJokes()
-        for (joke in jokeList){
-            addJoke(joke, jokeDao)
-        }
+    suspend fun addJokeToLocalDatabase(joke: Joke){
+        jokeDbRepository.addJokeToLocalDatabase(joke)
     }
 
-    suspend fun addJoke(joke: Joke, jokeDao: JokeDao){
-        JokeDbRepositoryImpl(jokeDao).addJoke(joke)
-    }
-
-    fun clearDB(jokeDao: JokeDao){
+    fun clearDB(){
         viewModelScope.launch(Dispatchers.IO){
-            JokeDbRepositoryImpl(jokeDao).clearDb()
-            val jokeListFromDb = JokeDbRepositoryImpl(jokeDao).getAllJokes()
-
+            //Чистим сетевой кэш
+            Log.d("test", "btn clear db pressed")
+            jokeDbRepository.clearDb()
+            val jokeListFromDb = jokeDbRepository.getJokesFromApiDatabase()
+            Log.d("test", "jokeListFromDb after clearing - ${jokeListFromDb.size}")
             withContext(Dispatchers.Main){
                 _jokeList.value = jokeListFromDb
             }
+
         }
     }
 
-    fun fillStaticDb(staticJokeDao: JokeDao){
+    fun fillStaticDb(){
         viewModelScope.launch(Dispatchers.IO) {
-            val jokeListFromStaticDb = JokeDbRepositoryImpl(staticJokeDao).getAllJokes()
+            val jokeListFromStaticDb = jokeDbRepository.getLoacalJokes()
             if (jokeListFromStaticDb.isEmpty()){
-                loadStaticJokes(staticJokeDao)
+                jokeDbRepository.loadStaticJokes()
+//                JokeDbRepositoryImpl(staticJokeDao).loadStaticJokes()
+//                loadStaticJokes(staticJokeDao)
             }
         }
     }
 
-    fun loadFromApi(jokeDao: JokeDao){
+    fun loadFromApi(){
         viewModelScope.launch(Dispatchers.IO) {
-            val isSuccess = JokeDbRepositoryImpl(jokeDao).refreshJokes()
+            val isSuccess = jokeDbRepository.refreshJokes()
             if (!isSuccess) {
                 withContext(Dispatchers.Main) {
                     _isError.value = true
@@ -93,9 +93,17 @@ class JokeViewModel : ViewModel() {
         }
     }
 
-    fun delete(jokeDao: JokeDao, id: Int){
+    fun deleteJokeFromApiDatabase(id: Int){
         viewModelScope.launch(Dispatchers.IO){
-            JokeDbRepositoryImpl(jokeDao).deleteJoke(id)
+            Log.d("test", "opended view model,deleteJokeFromApiDatabase ")
+            jokeDbRepository.deleteJokeFromApiDatabase(id)
+        }
+
+    }
+
+    fun deleteJokeFromLocalDatabase(id : Int){
+        viewModelScope.launch(Dispatchers.IO){
+            jokeDbRepository.deleteJokeFromLoacalDatabaae(id)
         }
     }
 

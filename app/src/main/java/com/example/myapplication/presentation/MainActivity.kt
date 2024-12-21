@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//
+
 //        AppDataBase.initDatabase(this)
 //        StaticDataBase.initDatabase(this)
 
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     fun onJokeClick(joke: Joke) {
 
-        val fragment = JokeDetailsFragment(joke, jokeDao, staticJokeDao)
+        val fragment = JokeDetailsFragment(joke)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment) // Укажите ID контейнера для фрагментов
             .addToBackStack(null) // Добавляем в backstack для навигации

@@ -3,8 +3,8 @@ package com.example.myapplication.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.db.JokeDao
-import com.example.myapplication.data.db.JokeDbRepositoryImpl
 import com.example.myapplication.di.modules.AppDatabaseDao
+import com.example.myapplication.domain.JokeDbRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -12,7 +12,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DeletionViewModel : ViewModel() {
+class DeletionViewModel @Inject constructor(private val jokeDbRepository: JokeDbRepository): ViewModel() {
 
     @Inject
     @AppDatabaseDao
@@ -32,7 +32,7 @@ class DeletionViewModel : ViewModel() {
         val currentTime: Long = System.currentTimeMillis()
         val expirationTime: Long = 24 * 60 * 60 * 1000     //  24 hours in mills
         viewModelScope.launch(Dispatchers.IO) {
-            JokeDbRepositoryImpl(jokeDao).deleteExpired(currentTime - expirationTime)
+            jokeDbRepository.deleteExpired(currentTime - expirationTime)
 
         }
 

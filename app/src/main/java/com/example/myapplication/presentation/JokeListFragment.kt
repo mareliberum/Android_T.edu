@@ -12,33 +12,33 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.MyApp
 import com.example.myapplication.R
-import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.databinding.FragmentJokeListBinding
-import com.example.myapplication.di.modules.AppDatabaseDao
-import com.example.myapplication.di.modules.StaticDatabaseDao
+import com.example.myapplication.domain.JokeDbRepository
 import com.example.myapplication.presentation.recycler.adapter.Adapter
 import javax.inject.Inject
 
 class JokeListFragment : Fragment() {
 
     @Inject
-    @AppDatabaseDao
-    lateinit var jokeDao: JokeDao
+    lateinit var jokeDbRepository: JokeDbRepository
 
     @Inject
-    @StaticDatabaseDao
-    lateinit var staticJokeDao: JokeDao
+    lateinit var jokeViewModelFactory: JokeViewModelFactory
+
+    val jokeViewModel: JokeViewModel by viewModels {JokeViewModelFactory(jokeDbRepository)}
 
     private lateinit var jokeAdapter: Adapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: FragmentJokeListBinding
-    val jokeViewModel: JokeViewModel by viewModels()
+
+
 
     override fun onAttach(context: Context) {
         /**
         Берем activity, к которой прикреплен фрагмент, открываем application этой активити
-        и приводим тип к нашей MyApp, открываем из нее appComponent dagger и вызываем у него inject
+        и приводим тип к MyApp, открываем из нее appComponent dagger и вызываем у него inject
          **/
+
         (requireActivity().application as MyApp).appComponent.inject(this)
         super.onAttach(context)
     }
@@ -54,13 +54,13 @@ class JokeListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        jokeViewModel.fillStaticDb(staticJokeDao)
+        jokeViewModel.fillStaticDb()
 
         jokeViewModel.jokeList.observe(viewLifecycleOwner) { jokeList ->
             Adapter.setItems(jokeAdapter, jokeList)
         }
 
-        jokeViewModel.fetchJokes(jokeDao, staticJokeDao)
+        jokeViewModel.fetchJokes()
 
         jokeViewModel.isError.observe(viewLifecycleOwner) { isError ->
             if (isError) {
@@ -90,8 +90,8 @@ class JokeListFragment : Fragment() {
 
                     // Проверяем, достигнут ли конец списка
                     if (lastVisibleItemPosition == totalItemCount - 1 && jokeViewModel.isLoading.value == false) {
-                        jokeViewModel.loadFromApi(jokeDao)
-                        jokeViewModel.fetchJokes(jokeDao, staticJokeDao)
+                        jokeViewModel.loadFromApi()
+                        jokeViewModel.fetchJokes()
 
                     }
                 }
@@ -100,7 +100,7 @@ class JokeListFragment : Fragment() {
         }
 
         binding.btnAddJoke.setOnClickListener {
-            val fragment = AddJokeFragment(staticJokeDao)
+            val fragment = AddJokeFragment()
 
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, fragment)
@@ -108,7 +108,7 @@ class JokeListFragment : Fragment() {
                 .commit()
         }
         binding.btnClearDb.setOnClickListener {
-            jokeViewModel.clearDB(jokeDao)
+            jokeViewModel.clearDB()
         }
     }
 

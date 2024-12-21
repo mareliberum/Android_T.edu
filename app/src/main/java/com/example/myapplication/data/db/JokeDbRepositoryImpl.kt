@@ -2,32 +2,11 @@ package com.example.myapplication.data.db
 
 import com.example.myapplication.data.RetrofitInstance
 import com.example.myapplication.domain.JokeDbRepository
+import javax.inject.Inject
 
-class JokeDbRepositoryImpl(private val jokeDao: JokeDao) : JokeDbRepository {
+class JokeDbRepositoryImpl @Inject constructor(private val jokeDao: JokeDao, private val staticJokeDao: JokeDao) : JokeDbRepository {
 
-    override suspend fun getAllJokes(): List<Joke> = jokeDao.getAllJokes()
-
-    override suspend fun deleteExpired(expirationTime: Long) {
-
-        jokeDao.deleteExpired(expirationTime)
-
-    }
-
-    override suspend fun addJoke(joke: Joke) {
-
-        jokeDao.insert(joke)
-
-    }
-
-    override suspend fun deleteJoke(id: Int) {
-        jokeDao.delete(id)
-    }
-
-    override suspend fun clearDb() {
-        jokeDao.clearDb()
-
-    }
-
+    //методы для работы с сетевым кэшем
 
     override suspend fun refreshJokes(): Boolean {
         try {
@@ -38,8 +17,9 @@ class JokeDbRepositoryImpl(private val jokeDao: JokeDao) : JokeDbRepository {
                 val setup = joke.setup
                 val delivery = joke.delivery
                 val timeStamp = System.currentTimeMillis()
-                val newJoke = Joke(id = 0, category, setup, delivery, isFromNet = true, timeStamp)
-                addJoke(newJoke)
+                val newJoke =
+                    Joke(id = 0, category, setup, delivery, isFromNet = true, timeStamp)
+                addJokeToLocalDatabase(newJoke)
             }
 
             return true
@@ -48,6 +28,43 @@ class JokeDbRepositoryImpl(private val jokeDao: JokeDao) : JokeDbRepository {
             return false
         }
     }
+
+    override suspend fun getJokesFromApiDatabase(): List<Joke> = jokeDao.getAllJokes()
+
+    override suspend fun deleteExpired(expirationTime: Long) {
+
+        jokeDao.deleteExpired(expirationTime)
+
+    }
+
+    override suspend fun clearDb() {
+        jokeDao.clearDb()
+    }
+
+    override suspend fun deleteJokeFromApiDatabase(id: Int) {
+        jokeDao.delete(id)
+
+    }
+
+    //  Методы взаимодействия с БД с локальными шутками
+
+    override suspend fun loadStaticJokes() {
+        val jokeList = JokeRepositoryImpl.getAllJokes()
+        for (joke in jokeList) {
+            addJokeToLocalDatabase(joke)
+        }
+    }
+
+    override suspend fun deleteJokeFromLoacalDatabaae(id: Int) {
+        staticJokeDao.delete(id)
+    }
+
+    override suspend fun addJokeToLocalDatabase(joke: Joke) {
+        staticJokeDao.insert(joke)
+    }
+
+    override suspend fun getLoacalJokes(): List<Joke> = staticJokeDao.getAllJokes()
+
 
 
 
