@@ -24,4 +24,8 @@ interface JokeDao {
    @Query("DELETE FROM jokes WHERE id == :id")
    suspend fun delete(id : Int)
 
+   @Query("SELECT * FROM jokes WHERE id ++ :id")
+   suspend fun getJokeById(id: Int): Joke
+
+
 }

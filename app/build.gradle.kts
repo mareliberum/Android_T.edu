@@ -4,6 +4,8 @@ plugins {
     kotlin("plugin.serialization") version "2.0.20"
     id("com.google.devtools.ksp")
 
+    id ("kotlin-kapt")
+
 }
 
 android {
@@ -89,6 +91,9 @@ dependencies {
 
     // optional - Paging 3 Integration
     implementation("androidx.room:room-paging:$room_version")
+
+    implementation (libs.dagger)
+    kapt (libs.dagger.compiler)
 
 
 
