@@ -16,4 +16,5 @@ interface JokeDbRepository {
     suspend fun deleteJokeFromLoacalDatabaae(id: Int)
     suspend fun loadStaticJokes()
     suspend fun getLoacalJokes() : List<Joke>
+
 }

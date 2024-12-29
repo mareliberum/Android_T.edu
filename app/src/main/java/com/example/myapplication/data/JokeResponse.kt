@@ -16,5 +16,7 @@ data class JokeItem(
     @SerializedName("setup")
     val setup : String,
     @SerializedName("delivery")
-    val delivery : String
+    val delivery : String,
+    @SerializedName("joke")
+    val joke : String
 )
