@@ -16,9 +16,7 @@ import com.example.myapplication.presentation.viewModels.JokeViewModel
 import com.example.myapplication.presentation.viewModels.JokeViewModelFactory
 import javax.inject.Inject
 
-class JokeDetailsFragment(
-    val joke: Joke
-) : Fragment() {
+class JokeDetailsFragment : Fragment() {
 
     private var _binding: FragmentJokeDetailsBinding? = null
     private val binding get() = _binding!!
@@ -29,6 +27,8 @@ class JokeDetailsFragment(
     lateinit var jokeViewModelFactory: JokeViewModelFactory
 
     private val jokeViewModel: JokeViewModel by viewModels { JokeViewModelFactory(jokeDbRepository) }
+    private lateinit var joke: Joke
+
 
     override fun onAttach(context: Context) {
         /**
@@ -38,6 +38,14 @@ class JokeDetailsFragment(
 
         (requireActivity().application as MyApp).appComponent.inject(this)
         super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            joke = it.getSerializable("joke") as Joke
+        }
+
     }
 
     override fun onCreateView(
@@ -67,6 +75,9 @@ class JokeDetailsFragment(
                 jokeViewModel.deleteJokeFromLocalDatabase(joke.id)
             }
             parentFragmentManager.popBackStack()
+        }
+        binding.btnFavourite.setOnClickListener {
+            joke.isFavourite = !joke.isFavourite
         }
 
     }

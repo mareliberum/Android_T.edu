@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.myapplication.presentation.fragments.JokeListFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_joke_list" />
+
+    <fragment
+        android:id="@+id/favourites"
+        android:name="com.example.myapplication.presentation.fragments.FavouritesFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_favourites" />
+
+    <fragment
+        android:id="@+id/navigation_joke_details"
+        android:name="com.example.myapplication.presentation.fragments.JokeDetailsFragment"
+        android:label="Joke Details"
+        tools:layout="@layout/fragment_joke_details" />
+
+    <fragment
+        android:id="@+id/navigation_addJoke"
+        android:name="com.example.myapplication.presentation.fragments.AddJokeFragment"
+        android:label="@string/AddJoke"
+        tools:layout="@layout/fragment_add_joke" />
+
+
+</navigation>

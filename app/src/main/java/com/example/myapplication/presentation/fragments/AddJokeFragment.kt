@@ -57,7 +57,8 @@ class AddJokeFragment : Fragment() {
                     setup = question.toString(),
                     delivery = answer.toString(),
                     isFromNet = false,
-                    timeStamp = System.currentTimeMillis()
+                    timeStamp = System.currentTimeMillis(),
+                    isFavourite = false
                 )
 
                 lifecycleScope.launch {

@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.myapplication.di.modules.DatabaseModule
 import com.example.myapplication.presentation.MainActivity
 import com.example.myapplication.presentation.fragments.AddJokeFragment
+import com.example.myapplication.presentation.fragments.FavouritesFragment
 import com.example.myapplication.presentation.fragments.JokeDetailsFragment
 import com.example.myapplication.presentation.fragments.JokeListFragment
 import dagger.BindsInstance
@@ -18,6 +19,8 @@ interface AppComponent {
     fun inject(fragment: JokeDetailsFragment)
 
     fun inject(fragment: AddJokeFragment)
+
+    fun inject(fragment: FavouritesFragment)
 
     fun inject(activity: MainActivity)
 

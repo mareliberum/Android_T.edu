@@ -19,13 +19,13 @@ class JokeDbRepositoryImpl @Inject constructor(private val jokeDao: JokeDao, pri
                 val delivery = joke.delivery
                 val timeStamp = System.currentTimeMillis()
                 val newJoke =
-                    Joke(id = 0, category, setup, delivery, isFromNet = true, timeStamp)
+                    Joke(id = 0, category, setup, delivery, isFromNet = true, timeStamp = timeStamp,
+                        isFavourite = false
+                    )
                 jokeDao.insert(newJoke)
             }
-
             return true
         } catch (e: Exception) {
-
             return false
         }
     }

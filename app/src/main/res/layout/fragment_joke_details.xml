@@ -6,8 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-
-    android:background="@drawable/item_background"
     >
 
 
@@ -47,6 +45,14 @@
         tools:text="@string/loremIpsum"
         >
     </TextView>
+    <Button
+        android:id="@+id/btn_favourite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/delete_joke"
+        android:text="@string/add_to_favourites"
+        >
+    </Button>
 
     <Button
         android:id="@+id/delete_joke"

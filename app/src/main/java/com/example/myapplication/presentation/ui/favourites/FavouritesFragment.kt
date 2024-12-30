@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +21,7 @@ import com.example.myapplication.presentation.viewModels.JokeViewModelFactory
 import com.example.myapplication.presentation.recycler.adapter.Adapter
 import javax.inject.Inject
 
-class JokeListFragment : Fragment() {
+class FavouritesFragment : Fragment() {
 
     @Inject
     lateinit var jokeDbRepository: JokeDbRepository
@@ -106,6 +105,7 @@ class JokeListFragment : Fragment() {
 
         binding.btnAddJoke.setOnClickListener {
             findNavController().navigate(R.id.navigation_addJoke)
+
         }
         binding.btnClearDb.setOnClickListener {
             jokeViewModel.clearDB()
