@@ -14,23 +14,20 @@ import javax.inject.Inject
 
 class DeletionViewModel @Inject constructor(private val jokeDbRepository: JokeDbRepository): ViewModel() {
 
-    @Inject
-    @AppDatabaseDao
-    lateinit var jokeDao: JokeDao
 
     //TODO : дополнить и исправить
-    fun scheduleCleanUp(jokeDao: JokeDao) {
+    fun scheduleCleanUp() {
         CoroutineScope(Dispatchers.IO).launch {
             while (isActive) {
-                deleteExpired(jokeDao)
+                deleteExpired()
                 delay(60 * 60 * 1000) // Check for expired data every 1 hour
             }
         }
     }
 
-    private fun deleteExpired(jokeDao: JokeDao) {
+    private fun deleteExpired() {
         val currentTime: Long = System.currentTimeMillis()
-        val expirationTime: Long = 24 * 60 * 60 * 1000     //  24 hours in mills
+        val expirationTime: Long = 12 * 60 * 60 * 1000     //  12 hours in mills
         viewModelScope.launch(Dispatchers.IO) {
             jokeDbRepository.deleteExpired(currentTime - expirationTime)
 

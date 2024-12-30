@@ -3,7 +3,7 @@ package com.example.myapplication.domain
 import com.example.myapplication.data.db.Joke
 
 interface JokeDbRepository {
-
+    //методы для работы с API БД
     suspend fun refreshJokes() : Boolean
     suspend fun deleteExpired(expirationTime : Long)
     suspend fun clearDb()

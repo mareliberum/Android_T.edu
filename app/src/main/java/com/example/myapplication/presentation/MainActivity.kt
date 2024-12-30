@@ -1,38 +1,42 @@
 package com.example.myapplication.presentation
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.myapplication.MyApp
 import com.example.myapplication.R
 import com.example.myapplication.data.db.Joke
 import com.example.myapplication.data.db.JokeDao
+import com.example.myapplication.domain.JokeDbRepository
 import com.example.myapplication.presentation.fragments.JokeDetailsFragment
 import com.example.myapplication.presentation.fragments.JokeListFragment
+import com.example.myapplication.presentation.viewModels.DeletionViewModel
+import com.example.myapplication.presentation.viewModels.DeletionViewModelFactory
+import com.example.myapplication.presentation.viewModels.JokeViewModelFactory
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var jokeDao : JokeDao
-    private lateinit var staticJokeDao : JokeDao
+    @Inject
+    lateinit var jokeDbRepository: JokeDbRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as MyApp).appComponent.inject(this)
+
         super.onCreate(savedInstanceState)
 
-//        AppDataBase.initDatabase(this)
-//        StaticDataBase.initDatabase(this)
+        //TODO вернуть deletionViewModel и внедрить туда зависимость
+        val deletionViewModel : DeletionViewModel by viewModels { DeletionViewModelFactory(jokeDbRepository) }
+
+        deletionViewModel.scheduleCleanUp()
 
         setContentView(R.layout.activity_main_fragments)
-
-//        jokeDao = AppDataBase.INSTANCE.JokeDao()
-//        staticJokeDao = StaticDataBase.INSTANCE.JokeDao()
-
         if (savedInstanceState == null) {
             openFragment()
         }
 
-        //TODO вернуть deletionViewModel и внедрить туда зависимость
-//        val deletionViewModel : DeletionViewModel by viewModels()
 
-//        deletionViewModel.scheduleCleanUp(jokeDao)
     }
 
     private fun openFragment() {
