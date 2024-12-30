@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.R
 import com.example.myapplication.data.db.Joke
 import com.example.myapplication.data.db.JokeDao
+import com.example.myapplication.presentation.fragments.JokeDetailsFragment
+import com.example.myapplication.presentation.fragments.JokeListFragment
 
 
 class MainActivity : AppCompatActivity() {

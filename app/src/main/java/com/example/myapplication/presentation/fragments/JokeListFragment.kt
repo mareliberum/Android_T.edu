@@ -1,7 +1,8 @@
-package com.example.myapplication.presentation
+package com.example.myapplication.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import com.example.myapplication.MyApp
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentJokeListBinding
 import com.example.myapplication.domain.JokeDbRepository
+import com.example.myapplication.presentation.viewModels.JokeViewModel
+import com.example.myapplication.presentation.viewModels.JokeViewModelFactory
 import com.example.myapplication.presentation.recycler.adapter.Adapter
 import javax.inject.Inject
 
@@ -25,19 +28,14 @@ class JokeListFragment : Fragment() {
     @Inject
     lateinit var jokeViewModelFactory: JokeViewModelFactory
 
-    val jokeViewModel: JokeViewModel by viewModels {JokeViewModelFactory(jokeDbRepository)}
+    val jokeViewModel: JokeViewModel by viewModels { JokeViewModelFactory(jokeDbRepository) }
 
     private lateinit var jokeAdapter: Adapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: FragmentJokeListBinding
 
 
-
     override fun onAttach(context: Context) {
-        /**
-        Берем activity, к которой прикреплен фрагмент, открываем application этой активити
-        и приводим тип к MyApp, открываем из нее appComponent dagger и вызываем у него inject
-         **/
 
         (requireActivity().application as MyApp).appComponent.inject(this)
         super.onAttach(context)
@@ -54,13 +52,14 @@ class JokeListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //  сначала заполняем локальную базу
         jokeViewModel.fillStaticDb()
 
         jokeViewModel.jokeList.observe(viewLifecycleOwner) { jokeList ->
             Adapter.setItems(jokeAdapter, jokeList)
         }
 
-        jokeViewModel.fetchJokes()
 
         jokeViewModel.isError.observe(viewLifecycleOwner) { isError ->
             if (isError) {
@@ -72,6 +71,10 @@ class JokeListFragment : Fragment() {
             if (isLoading) binding.progressBar.visibility =
                 View.VISIBLE else binding.progressBar.visibility = View.GONE
         }
+
+        // Выгружаем шутки из обеих баз
+        jokeViewModel.fetchJokes()
+
 
         recyclerView = binding.recyclerView
         jokeAdapter = Adapter()
@@ -109,6 +112,8 @@ class JokeListFragment : Fragment() {
         }
         binding.btnClearDb.setOnClickListener {
             jokeViewModel.clearDB()
+            Log.d("test", "clear db")
+            jokeViewModel.fetchJokes()
         }
     }
 
@@ -117,6 +122,4 @@ class JokeListFragment : Fragment() {
         Toast.makeText(activity, "No internet connection!", Toast.LENGTH_LONG).show()
 
     }
-
-
 }

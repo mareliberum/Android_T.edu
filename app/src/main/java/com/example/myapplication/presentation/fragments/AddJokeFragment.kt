@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation
+package com.example.myapplication.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -12,6 +12,8 @@ import com.example.myapplication.MyApp
 import com.example.myapplication.data.db.Joke
 import com.example.myapplication.databinding.FragmentAddJokeBinding
 import com.example.myapplication.domain.JokeDbRepository
+import com.example.myapplication.presentation.viewModels.JokeViewModel
+import com.example.myapplication.presentation.viewModels.JokeViewModelFactory
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

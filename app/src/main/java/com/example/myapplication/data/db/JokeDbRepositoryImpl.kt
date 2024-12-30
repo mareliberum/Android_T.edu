@@ -1,5 +1,6 @@
 package com.example.myapplication.data.db
 
+import android.util.Log
 import com.example.myapplication.data.RetrofitInstance
 import com.example.myapplication.domain.JokeDbRepository
 import javax.inject.Inject
@@ -11,7 +12,7 @@ class JokeDbRepositoryImpl @Inject constructor(private val jokeDao: JokeDao, pri
     override suspend fun refreshJokes(): Boolean {
         try {
             val jokesFromNet = RetrofitInstance.api.getJokes().jokes
-
+            Log.d("test", "loading from api")
             for (joke in jokesFromNet) {
                 val category = joke.category
                 val setup = joke.setup
@@ -19,7 +20,7 @@ class JokeDbRepositoryImpl @Inject constructor(private val jokeDao: JokeDao, pri
                 val timeStamp = System.currentTimeMillis()
                 val newJoke =
                     Joke(id = 0, category, setup, delivery, isFromNet = true, timeStamp)
-                addJokeToLocalDatabase(newJoke)
+                jokeDao.insert(newJoke)
             }
 
             return true
@@ -55,7 +56,7 @@ class JokeDbRepositoryImpl @Inject constructor(private val jokeDao: JokeDao, pri
         }
     }
 
-    override suspend fun deleteJokeFromLoacalDatabaae(id: Int) {
+    override suspend fun deleteJokeFromLocalDatabase(id: Int) {
         staticJokeDao.delete(id)
     }
 
@@ -63,7 +64,7 @@ class JokeDbRepositoryImpl @Inject constructor(private val jokeDao: JokeDao, pri
         staticJokeDao.insert(joke)
     }
 
-    override suspend fun getLoacalJokes(): List<Joke> = staticJokeDao.getAllJokes()
+    override suspend fun getLocalJokes(): List<Joke> = staticJokeDao.getAllJokes()
 
 
 

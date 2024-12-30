@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation
+package com.example.myapplication.presentation.viewModels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.db.Joke
 import com.example.myapplication.domain.JokeDbRepository
-import com.example.myapplication.domain.JokeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,30 +23,33 @@ class JokeViewModel @Inject constructor(private val jokeDbRepository: JokeDbRepo
     private var _jokeList = MutableLiveData<List<Joke>>()
     val jokeList: LiveData<List<Joke>> = _jokeList
 
-
     fun fetchJokes() {
         if (_isLoading.value == true) return
-
+        Log.d("test", "fetching jokes")
         _isLoading.value = true
 
         viewModelScope.launch(Dispatchers.IO){
             //идем в БД с локальными
-            val jokeListFromStaticDb = jokeDbRepository.getLoacalJokes()
+            val jokeListFromStaticDb = jokeDbRepository.getLocalJokes()
+            Log.d("test", "local size ${jokeListFromStaticDb.size}")
 
-            //если бд пустая - грузим из api
+            //если бд пустая - грузим из api. По факту, на старте экрана не должна быть пустой
             if (jokeListFromStaticDb.isEmpty()){
+                Log.d("test","loading from api")
                 loadFromApi()
             }
-            //ВЫгружаем из сетевого кэша
-            val jokeListFromDb = jokeDbRepository.getJokesFromApiDatabase()
 
-            //Общий список
-            val jokeList = jokeListFromStaticDb + jokeListFromDb
+            //ВЫгружаем из сетевого кэша
+
+            val jokeListFromDb = jokeDbRepository.getJokesFromApiDatabase()
+            Log.d("test", "api db size ${jokeListFromDb.size}")
+
 
             withContext(Dispatchers.Main){
                 _isLoading.value = false
                 _isError.value = false
-                _jokeList.value = jokeList
+                _jokeList.value = jokeListFromStaticDb + jokeListFromDb
+
 
             }
         }
@@ -61,11 +63,10 @@ class JokeViewModel @Inject constructor(private val jokeDbRepository: JokeDbRepo
         viewModelScope.launch(Dispatchers.IO){
             //Чистим сетевой кэш
             Log.d("test", "btn clear db pressed")
+
             jokeDbRepository.clearDb()
-            val jokeListFromDb = jokeDbRepository.getJokesFromApiDatabase()
-            Log.d("test", "jokeListFromDb after clearing - ${jokeListFromDb.size}")
             withContext(Dispatchers.Main){
-                _jokeList.value = jokeListFromDb
+
             }
 
         }
@@ -73,11 +74,8 @@ class JokeViewModel @Inject constructor(private val jokeDbRepository: JokeDbRepo
 
     fun fillStaticDb(){
         viewModelScope.launch(Dispatchers.IO) {
-            val jokeListFromStaticDb = jokeDbRepository.getLoacalJokes()
-            if (jokeListFromStaticDb.isEmpty()){
+            if (jokeDbRepository.getLocalJokes().isEmpty()){
                 jokeDbRepository.loadStaticJokes()
-//                JokeDbRepositoryImpl(staticJokeDao).loadStaticJokes()
-//                loadStaticJokes(staticJokeDao)
             }
         }
     }
@@ -95,15 +93,16 @@ class JokeViewModel @Inject constructor(private val jokeDbRepository: JokeDbRepo
 
     fun deleteJokeFromApiDatabase(id: Int){
         viewModelScope.launch(Dispatchers.IO){
-            Log.d("test", "opended view model,deleteJokeFromApiDatabase ")
+            Log.d("test", "opened view model,deleteJokeFromApiDatabase with id $id")
             jokeDbRepository.deleteJokeFromApiDatabase(id)
+
         }
 
     }
 
     fun deleteJokeFromLocalDatabase(id : Int){
         viewModelScope.launch(Dispatchers.IO){
-            jokeDbRepository.deleteJokeFromLoacalDatabaae(id)
+            jokeDbRepository.deleteJokeFromLocalDatabase(id)
         }
     }
 

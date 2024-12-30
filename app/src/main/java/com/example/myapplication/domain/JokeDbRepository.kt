@@ -12,9 +12,9 @@ interface JokeDbRepository {
     suspend fun getJokesFromApiDatabase(): List<Joke>
 
     //методы для бд с локальными шуткми
-    suspend fun deleteJokeFromLoacalDatabaae(id: Int)
+    suspend fun deleteJokeFromLocalDatabase(id: Int)
     suspend fun loadStaticJokes()
-    suspend fun getLoacalJokes() : List<Joke>
+    suspend fun getLocalJokes() : List<Joke>
 
 
 }

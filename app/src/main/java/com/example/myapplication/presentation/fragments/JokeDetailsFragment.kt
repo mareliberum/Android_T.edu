@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation
+package com.example.myapplication.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -10,9 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.myapplication.MyApp
 import com.example.myapplication.data.db.Joke
-import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.databinding.FragmentJokeDetailsBinding
 import com.example.myapplication.domain.JokeDbRepository
+import com.example.myapplication.presentation.viewModels.JokeViewModel
+import com.example.myapplication.presentation.viewModels.JokeViewModelFactory
 import javax.inject.Inject
 
 class JokeDetailsFragment(
@@ -27,7 +28,7 @@ class JokeDetailsFragment(
     @Inject
     lateinit var jokeViewModelFactory: JokeViewModelFactory
 
-    private val jokeViewModel: JokeViewModel by viewModels {JokeViewModelFactory(jokeDbRepository)}
+    private val jokeViewModel: JokeViewModel by viewModels { JokeViewModelFactory(jokeDbRepository) }
 
     override fun onAttach(context: Context) {
         /**

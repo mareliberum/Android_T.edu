@@ -2,9 +2,9 @@ package com.example.myapplication.di
 
 import android.content.Context
 import com.example.myapplication.di.modules.DatabaseModule
-import com.example.myapplication.presentation.AddJokeFragment
-import com.example.myapplication.presentation.JokeDetailsFragment
-import com.example.myapplication.presentation.JokeListFragment
+import com.example.myapplication.presentation.fragments.AddJokeFragment
+import com.example.myapplication.presentation.fragments.JokeDetailsFragment
+import com.example.myapplication.presentation.fragments.JokeListFragment
 import dagger.BindsInstance
 import dagger.Component
 

@@ -7,8 +7,6 @@ import androidx.room.Query
 
 @Dao
 interface JokeDao {
-
-
    @Insert(onConflict = OnConflictStrategy.REPLACE)
    suspend fun insert(joke : Joke)
 
