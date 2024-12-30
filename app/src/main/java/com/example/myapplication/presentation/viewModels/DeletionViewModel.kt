@@ -15,7 +15,6 @@ import javax.inject.Inject
 class DeletionViewModel @Inject constructor(private val jokeDbRepository: JokeDbRepository): ViewModel() {
 
 
-    //TODO : дополнить и исправить
     fun scheduleCleanUp() {
         CoroutineScope(Dispatchers.IO).launch {
             while (isActive) {

@@ -12,6 +12,10 @@ class JokeViewModelFactory @Inject constructor(private val jokeDbRepository: Jok
             @Suppress("UNCHECKED_CAST")
             return JokeViewModel(jokeDbRepository) as T
         }
+        if(modelClass.isAssignableFrom(DeletionViewModel::class.java)){
+            @Suppress("UNCHECKED_CAST")
+            return DeletionViewModel(jokeDbRepository) as T
+        }
 
         throw UnsupportedOperationException(
             "Factory.create(String) is unsupported.  This Factory requires " +

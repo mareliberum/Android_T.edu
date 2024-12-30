@@ -6,12 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.MyApp
 import com.example.myapplication.R
 import com.example.myapplication.data.db.Joke
-import com.example.myapplication.data.db.JokeDao
 import com.example.myapplication.domain.JokeDbRepository
 import com.example.myapplication.presentation.fragments.JokeDetailsFragment
 import com.example.myapplication.presentation.fragments.JokeListFragment
 import com.example.myapplication.presentation.viewModels.DeletionViewModel
-import com.example.myapplication.presentation.viewModels.DeletionViewModelFactory
 import com.example.myapplication.presentation.viewModels.JokeViewModelFactory
 import javax.inject.Inject
 
@@ -26,8 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        //TODO вернуть deletionViewModel и внедрить туда зависимость
-        val deletionViewModel : DeletionViewModel by viewModels { DeletionViewModelFactory(jokeDbRepository) }
+        val deletionViewModel : DeletionViewModel by viewModels { JokeViewModelFactory(jokeDbRepository) }
 
         deletionViewModel.scheduleCleanUp()
 
